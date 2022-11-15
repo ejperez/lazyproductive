@@ -1,0 +1,17 @@
+{
+	"name": "LazyProductive",
+	"version": "0.0.1",
+	"description": "Create timesheet summaries from productive.io",
+	"manifest_version": 3,
+	"author": "EJ",
+	"action": {
+		"default_popup": "index.html",
+		"default_title": "LazyProductive"
+	},
+	"permissions": [
+		"scripting"
+	],
+	"host_permissions": [
+		"https://app.productive.io/*"
+	]
+}
