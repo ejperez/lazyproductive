@@ -22,8 +22,8 @@ function extractDaily () {
 			task = e.querySelector( '.time-entry-item-form__service-name' ).innerText.trim(),
 			notes = e.querySelector( '.time-entry-item-form__note-field' ).innerText.trim();
 
-		return ( task.indexOf( client ) === -1 ? client + '\n' : '' ) + task + ( notes ? ' (' + notes + ')' : '' );
-	} ).join( '\r\n\r\n' );
+		return ( task.indexOf( client ) === -1 ? client + ' ' : '' ) + task + ( notes ? ' (' + notes + ')' : '' );
+	} ).join( '\r\n' );
 }
 
 window.onload = () => {
