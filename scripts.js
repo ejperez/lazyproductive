@@ -1,5 +1,6 @@
 const output = document.getElementById( 'output' ),
 	copyButton = document.getElementById( 'js-copy' ),
+	slug = document.getElementById( 'js-slug' ),
 	templates = {
 		daily: `What did you do today?
 [output]
@@ -12,15 +13,23 @@ None
 Thank you.`
 	};
 
+const slugify = str =>
+	str
+		.toLowerCase()
+		.trim()
+		.replace( /[^\w\s-]/g, '' )
+		.replace( /[\s_-]+/g, '-' )
+		.replace( /^-+|-+$/g, '' );
+
 function extractDaily () {
-	if ( !document.querySelector( '.time-day-entry-forms__time-table' ) ) {
+	if ( !document.querySelector( '.page-container' ) ) {
 		return 'ERROR: Not in Harvest daily timesheet page!';
 	}
 
-	return [...document.querySelectorAll( '.time-day-entry-forms__time-table .time-entry-item-form' )].map( e => {
-		let client = e.querySelector( '.time-entry-item-form__project-link' ).innerText.trim(),
-			task = e.querySelector( '.time-entry-item-form__service-name' ).innerText.trim(),
-			notes = e.querySelector( '.time-entry-item-form__note-field' ).innerText.trim();
+	return [...document.querySelectorAll( '[class^="form-for _time-entry-item_"]' )].map( e => {
+		let client = e.querySelector( '[class^="_project-link_"]' ).innerText.trim(),
+			task = e.querySelector( '[class^="_service-name_"]' ).innerText.trim(),
+			notes = e.querySelector( '[class^="_note-and-task_"]' ).innerText.trim();
 
 		return ( task.indexOf( client ) === -1 ? client + ' ' : '' ) + task + ( notes ? ' (' + notes + ')' : '' );
 	} ).join( '\r\n' );
@@ -38,6 +47,8 @@ window.onload = () => {
 					func: extractDaily,
 				},
 				( injectionResults ) => {
+					if ( !injectionResults ) return;
+
 					for ( const frameResult of injectionResults ) {
 						output.value = templates.daily.replaceAll( '[output]', frameResult.result );
 						output.style.display = 'block';
@@ -56,4 +67,8 @@ copyButton.addEventListener( 'click', ( e ) => {
 	const originalText = copyButton.innerText;
 
 	setTimeout( () => copyButton.innerText = originalText, 1000 );
+} );
+
+slug.addEventListener( 'change', () => {
+	slug.value = slugify( slug.value );
 } );
